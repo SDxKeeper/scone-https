@@ -5,6 +5,7 @@ import requests
 # TODO try requests
 import hashlib
 import argparse
+import traceback
 
 if len(os.environ) == 0 or 'SCONE_MODE' in os.environ:
     teeMode=True
@@ -53,7 +54,7 @@ if __name__ == "__main__":
             if not os.path.exists(tmp_image_path):
                 print("Failed to download picture")
         except:
-            print("Unexpected error:", sys.exc_info()[0])
+            print(traceback.format_exc())
 
         if os.path.exists(tmp_image_path):
             print("Using image: ", image_path, " md5 hash: ", md5(tmp_image_path))
@@ -62,7 +63,6 @@ if __name__ == "__main__":
         
         try:
             print("Downloading picture using requests from ", image_path)
-            tmp_image_path = "/tmp/image2.jpg"
             r = requests.get(image_path, stream=True)
             with open(tmp_image_path, 'wb') as fd:
                 for chunk in r.iter_content(chunk_size=download_chunk_size):
@@ -71,8 +71,8 @@ if __name__ == "__main__":
             if not os.path.exists(tmp_image_path):
                 print("Failed to download picture")
         except:
-            print("Unexpected error:", sys.exc_info()[0])
-        
+            print(traceback.format_exc())
+                    
         if os.path.exists(tmp_image_path):
             print("Using image: ", image_path, " md5 hash: ", md5(tmp_image_path))
     else:
